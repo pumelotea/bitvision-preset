@@ -1,0 +1,21 @@
+{
+  "name": "bitvision-preset",
+  "version": "1.0.5",
+  "description": "preset for bitvision",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pumelotea/vue-cli-plugin-bitvision.git"
+  },
+  "keywords": [
+    "vue",
+    "cli",
+    "custom",
+    "template",
+    "plugin"
+  ],
+  "homepage": "https://github.com/pumelotea/vue-cli-plugin-bitvision/blob/master/README.md",
+  "author": "pumelotea",
+  "license": "MIT"
+}
