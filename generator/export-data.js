@@ -37,7 +37,14 @@ ${template}
   `
   return vueFile
   },
-  exportLayout({colTemplate, rowTemplate, columngap, rowgap, childarea}) {
+  exportLayout({columns, rows, columngap, rowgap, childarea,colArr,rowArr}) {
+    const repetition = require('./repetition');
+
+    const unitGroups1 = repetition.groupRepeatedUnits(colArr)
+    let colTemplate =  repetition.createRepetition(unitGroups1)
+    const unitGroups2 = repetition.groupRepeatedUnits(rowArr)
+    let rowTemplate = repetition.createRepetition(unitGroups2)
+
     let parentCss = `
   .parent {
     display:grid;

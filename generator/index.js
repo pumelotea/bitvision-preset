@@ -3,31 +3,49 @@ function renderFiles(api, opts) {
   const fs = require('fs')
   const ep = require('./export-data')
   const path = require('path')
-  // 通过preset的形式配置opts.router，这里则不需要
-  // const routerPath = api.resolve('./src/router.js')
-  // opts.router = opts.router || fs.existsSync(routerPath)
+  const req = require('./request')
+  const readlineSync = require('readline-sync')
 
-  const filesToDelete = [
-    'src/assets/logo.png',
-    'src/views/About.vue',
-    'src/views/Home.vue',
-    'src/components/HelloWorld.vue',
-  ]
+  let token = null
+  while (true) {
+    let username = readlineSync.question('bitvision username:');
+    let password = readlineSync.question('bitvision password:');
+    token = req.login(username, password)
+    if (!token) {
+      console.log('[ERROR] login failed')
+      continue
+    }
+    break
+  }
 
-  // console.log('\n[custom-tpl plugin tips]\n \t GeneratorAPI options:', opts)
+  let list = req.getList(token)
+  if (list.length === 0) {
+    console.log('[ERROR] you project list is empty')
+    process.exit()
+  }
 
-  // https://github.com/vuejs/vue-cli/issues/2470
-  api.render(files => {
-    Object.keys(files)
-      .filter(name => filesToDelete.indexOf(name) > -1)
-      .forEach(name => delete files[name])
-  })
-  api.render('./templates/base')
+  let config = ''
+  while (true) {
+    console.log('select project:')
+    console.log('----------------------------')
+    list.forEach(e => {
+      console.log(`[${e.id}] `, e.name)
+    })
+    console.log('----------------------------')
+    let chooseId = readlineSync.question('select project id:');
+    let choose = list.filter(e => e.id === chooseId)
+    if (choose.length === 0) {
+      console.log('[ERROR] please choose id in list')
+      continue
+    }
+    config = JSON.parse(choose[0].config_json)
+    break
+  }
 
 
   //写入文件
   api.onCreateComplete(() => {
-    let json = JSON.parse(opts.editedJson)
+    let json = config
     console.log('\n')
     console.log('📄  Generating ', `${api.resolve('src')}/views/vision.vue`)
     console.log('📄  Generating ', `${api.resolve('src')}/components/Layout.vue`)
@@ -41,6 +59,22 @@ function renderFiles(api, opts) {
     fs.closeSync(fdCode);
     fs.closeSync(fdLayoutCode);
   })
+
+
+  const filesToDelete = [
+    'src/assets/logo.png',
+    'src/views/About.vue',
+    'src/views/Home.vue',
+    'src/components/HelloWorld.vue',
+  ]
+
+
+  api.render(files => {
+    Object.keys(files)
+      .filter(name => filesToDelete.indexOf(name) > -1)
+      .forEach(name => delete files[name])
+  })
+  api.render('./templates/base')
 
 
 }

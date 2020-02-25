@@ -17,5 +17,10 @@
   ],
   "homepage": "https://github.com/pumelotea/vue-cli-plugin-bitvision/blob/master/README.md",
   "author": "pumelotea",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "inquirer": "^7.0.4",
+    "readline-sync": "^1.4.10",
+    "sync-request": "^6.1.0"
+  }
 }
