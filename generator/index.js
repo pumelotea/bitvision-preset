@@ -35,7 +35,7 @@ function renderFiles(api, opts) {
     let chooseId = readlineSync.question('select project id:');
     let choose = list.filter(e => e.id === chooseId)
     if (choose.length === 0) {
-      console.log('[ERROR] please choose id in list')
+      console.log('[ERROR] please choose id from list')
       continue
     }
     config = JSON.parse(choose[0].config_json)
